@@ -48,7 +48,8 @@ export class IvyPinch {
             return;
         }
 
-        this.elementTarget = this.element.querySelector('*').tagName;
+        this.elementTarget = this.element.querySelector('*')?.tagName;
+        if (!this.elementTarget) return;
         this.parentElement = this.element.parentElement;
         this.properties = Object.assign({}, defaultProperties, properties);
         this.detectLimitZoom();
