@@ -5,3 +5,4 @@
 export * from './lib/interfaces';
 export * from './lib/pinch-zoom.module';
 export * from './lib/pinch-zoom.component';
+export * from './lib/pinch-zoom.service';
