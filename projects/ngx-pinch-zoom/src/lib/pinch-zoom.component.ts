@@ -138,6 +138,7 @@ export class PinchZoomComponent implements OnDestroy {
     @Input() draggableImage!: boolean;
 
     @Input() imgId?: string;
+    @Input() resetZoom: boolean = true;
 
     @HostBinding('style.overflow')
     get hostOverflow() {
@@ -173,7 +174,7 @@ export class PinchZoomComponent implements OnDestroy {
     }
 
     get scale() {
-        return this.pinchZoom.scale;
+        return this.pinchZoom ? this.pinchZoom.scale : 1;
     }
 
     get isZoomedIn() {
@@ -185,7 +186,7 @@ export class PinchZoomComponent implements OnDestroy {
     }
 
     get maxScale() {
-        return this.pinchZoom.maxScale;
+        return this.pinchZoom ? this.pinchZoom.maxScale : undefined;
     }
 
     get isZoomLimitReached() {
@@ -217,8 +218,11 @@ export class PinchZoomComponent implements OnDestroy {
     ngOnChanges(changes:SimpleChanges) {
         let changedProperties = this.getProperties(changes);
         changedProperties = this.renameProperties(changedProperties);
-
+        
         this.applyPropertiesDefault(this.defaultComponentProperties, changedProperties);
+        if (changes.imgId?.currentValue && this.resetZoom) {
+            this.resetScale();
+        }
     }
 
     ngOnDestroy() {
@@ -266,11 +270,11 @@ export class PinchZoomComponent implements OnDestroy {
     }
 
     toggleZoom() {
-        this.pinchZoom.toggleZoom();
+        this.pinchZoom?.toggleZoom();
     }
 
     resetScale() {
-        this.pinchZoom.resetScale();
+        this.pinchZoom?.resetScale();
     }
 
     isControl() {
