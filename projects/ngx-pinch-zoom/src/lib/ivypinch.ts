@@ -30,7 +30,7 @@ export class IvyPinch {
     initialDistance: number = 0;
     events: any = {};
     maxScale!: number;
-    defaultMaxScale: number = 3;
+    defaultMaxScale: number = 10;
 
     // Minimum scale at which panning works
     get minPanScale() {
