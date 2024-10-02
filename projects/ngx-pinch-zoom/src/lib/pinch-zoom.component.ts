@@ -140,6 +140,18 @@ export class PinchZoomComponent implements OnDestroy {
     @Input() imgId?: string;
     @Input() resetZoom: boolean = true;
 
+    @Input() enableHighlight: boolean = false;
+    @Input() enableRotation: boolean = false;
+
+    @Input() rectangleWidthPercent: number = 100;
+    @Input() rectangleHeightPercent: number = 10;
+
+    public highlightRectangleStyles: { [key: string]: string } = {};
+    public overlayTopStyles: { [key: string]: string } = {};
+    public overlayBottomStyles: { [key: string]: string } = {};
+    public overlayLeftStyles: { [key: string]: string } = {};
+    public overlayRightStyles: { [key: string]: string } = {};
+
     @HostBinding('style.overflow')
     get hostOverflow() {
         return this.properties['overflow'];
@@ -197,6 +209,17 @@ export class PinchZoomComponent implements OnDestroy {
         return this.getPropertiesValue('zoomControlScale');
     }
 
+    get rotationAngle() {
+        return this.pinchZoom ? this.pinchZoom.rotation : 0;
+    }
+
+    set rotationAngle(value: number) {
+        if (this.pinchZoom) {
+            this.pinchZoom.rotation = value;
+            this.rotationChanged();
+        }
+    }
+
    constructor(private elementRef: ElementRef, private pinchZoomSvc: PinchZoomService) {
         this.defaultComponentProperties = this.getDefaultComponentProperties();
         this.applyPropertiesDefault(this.defaultComponentProperties, {});
@@ -213,6 +236,10 @@ export class PinchZoomComponent implements OnDestroy {
         
         /* Calls the method until the image size is available */
         this.detectLimitZoom();
+
+        if (this.enableHighlight) {
+            this.updateHighlightStyles();
+        }
     }
 
     ngOnChanges(changes:SimpleChanges) {
@@ -275,6 +302,53 @@ export class PinchZoomComponent implements OnDestroy {
 
     resetScale() {
         this.pinchZoom?.resetScale();
+    }
+
+    rotationChanged() {
+        this.pinchZoom?.rotationChanged();
+    }
+
+    updateHighlightStyles() {
+        const topBottomHeightPercent = (100 - this.rectangleHeightPercent) / 2;
+        const leftRightWidthPercent = (100 - this.rectangleWidthPercent) / 2;
+
+        this.highlightRectangleStyles = {
+            'width': `${this.rectangleWidthPercent}%`,
+            'height': `${this.rectangleHeightPercent}%`,
+            'top': '50%',
+            'left': '50%',
+            'transform': 'translate(-50%, -50%)'
+        };
+
+        this.overlayTopStyles = {
+            'height': `${topBottomHeightPercent}%`,
+            'width': '100%',
+            'top': '0',
+            'left': '0'
+        };
+  
+        this.overlayBottomStyles = {
+            'height': `${topBottomHeightPercent}%`,
+            'width': '100%',
+            'bottom': '0',
+            'left': '0'
+        };
+
+        this.overlayLeftStyles = {
+            'width': `${leftRightWidthPercent}%`,
+            'height': `${this.rectangleHeightPercent}%`,
+            'top': '50%',
+            'left': '0',
+            'transform': 'translateY(-50%)'
+        };
+      
+        this.overlayRightStyles = {
+            'width': `${leftRightWidthPercent}%`,
+            'height': `${this.rectangleHeightPercent}%`,
+            'top': '50%',
+            'right': '0',
+            'transform': 'translateY(-50%)'
+        };
     }
 
     isControl() {

@@ -2,6 +2,20 @@
 	<ng-content></ng-content>
 </div>
 
+<div *ngIf="enableHighlight">
+	<div class="highlight-rectangle" [ngStyle]="highlightRectangleStyles"></div>
+	<div class="highlight-overlay overlay-top" [ngStyle]="overlayTopStyles"></div>
+	<div class="highlight-overlay overlay-bottom"  [ngStyle]="overlayBottomStyles"></div>
+	<div class="highlight-overlay overlay-left" [ngStyle]="overlayLeftStyles"></div>
+	<div class="highlight-overlay overlay-right" [ngStyle]="overlayRightStyles"></div>
+</div>
+
+<div *ngIf="enableRotation">
+	<div class="slider-container" [ngClass]="isControl() ? 'slider-bottom-with-zoom-button' : 'slider-bottom-without-zoom-button'">
+		<input class="rotation-input" type="range" min="-180" max="180" [(ngModel)]="rotationAngle" (ngModelChange)="rotationChanged()" />
+	</div>
+</div>
+
 <!-- Control: one button -->
 <div class="pz-zoom-button pz-zoom-control-position-bottom" 
 	[class.pz-zoom-button-out]="isZoomedIn" 

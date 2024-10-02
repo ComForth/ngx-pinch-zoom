@@ -31,6 +31,7 @@ export class IvyPinch {
     events: any = {};
     maxScale!: number;
     defaultMaxScale: number = 10;
+    rotation: number = 0;
 
     // Minimum scale at which panning works
     get minPanScale() {
@@ -516,7 +517,7 @@ export class IvyPinch {
 
     transformElement(duration: any) {
         this.element.style.transition = "all " + duration + "ms";
-        this.element.style.transform = "matrix(" + Number(this.scale) + ", 0, 0, " + Number(this.scale) + ", " + Number(this.moveX) + ", " + Number(this.moveY) + ")";
+        this.element.style.transform = `matrix(${Number(this.scale)}, 0, 0, ${Number(this.scale)}, ${Number(this.moveX)}, ${Number(this.moveY)}) rotate(${this.rotation}deg)`;
     }
 
     isTouchScreen() {
@@ -656,6 +657,12 @@ export class IvyPinch {
             this.updateInitialValues();
             this.transformElement(this.properties.transitionDuration);
         }
+    }
+
+    rotationChanged() {
+        this.element.style.transition = "all " + this.properties.transitionDuration + "ms";
+        this.element.style.transform = `matrix(${Number(this.scale)}, 0, 0, ${Number(this.scale)}, ${Number(this.moveX)}, ${Number(this.moveY)}) rotate(${this.rotation}deg)`;
+        this.element.style.transformOrigin = 'center';
     }
 
     destroy() {
