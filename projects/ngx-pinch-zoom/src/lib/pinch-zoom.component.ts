@@ -21,10 +21,11 @@ export const _defaultComponentProperties:ComponentProperties = {
 type PropertyName = keyof ComponentProperties;
 
 @Component({
-	selector: 'pinch-zoom, [pinch-zoom]',
+    selector: 'pinch-zoom, [pinch-zoom]',
     exportAs: 'pinchZoom',
     templateUrl: './pinch-zoom.component.html',
-    styleUrls: ['./pinch-zoom.component.sass']
+    styleUrls: ['./pinch-zoom.component.sass'],
+    standalone: false
 })
 
 export class PinchZoomComponent implements OnDestroy {
